@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Question from './Question';
 import MultipleChoiceQuestion from './MultipleChoiceQuestion';
 import ShortQuestion from './ShortQuestion';
+import { Button } from '@mui/material';
 
 const TestComponent: React.FC = () => {
   const questions = [
@@ -21,9 +22,11 @@ const TestComponent: React.FC = () => {
     }
   ];
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [loadedFromStorage, setLoadedFromStorage] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(
+    parseInt(localStorage.getItem('currentQuestionIndex') || '0')
+  );
+  const [score, setScore] = useState(parseInt(localStorage.getItem('score') || '0'));
+  const [isTestComplete, setIsTestComplete] = useState(false);
 
   const handleNextQuestion = (isCorrect: boolean) => {
     if (isCorrect) {
@@ -32,28 +35,27 @@ const TestComponent: React.FC = () => {
     setCurrentQuestionIndex(prevIndex => prevIndex + 1);
   };
 
-  useEffect(() => {
-    const savedProgress = localStorage.getItem('testProgress');
-    if (savedProgress) {
-      const { savedIndex, savedScore } = JSON.parse(savedProgress);
-      setCurrentQuestionIndex(savedIndex);
-      setScore(savedScore);
-      setLoadedFromStorage(true);
-    }
-  }, []);
+  const handleRestartTest = () => {
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setIsTestComplete(false);
+    localStorage.clear(); // Очищаем сохраненные данные при рестарте
+  };
 
   useEffect(() => {
-    if (loadedFromStorage) {
-      const progress = { savedIndex: currentQuestionIndex, savedScore: score };
-      localStorage.setItem('testProgress', JSON.stringify(progress));
+    localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+    localStorage.setItem('score', score.toString());
+
+    if (currentQuestionIndex === questions.length) {
+      setIsTestComplete(true);
     }
-  }, [currentQuestionIndex, score, loadedFromStorage]);
+  }, [currentQuestionIndex, score]);
 
   return (
     <div>
-      <>
-        {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
-          currentQuestionIndex === 0 ? (
+      {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
+        <>
+          {currentQuestionIndex === 0 ? (
             <Question
               question={questions[currentQuestionIndex]?.question}
               options={questions[currentQuestionIndex]?.options || []}
@@ -73,16 +75,19 @@ const TestComponent: React.FC = () => {
               answer={questions[currentQuestionIndex].answer || ''}
               handleNextQuestion={handleNextQuestion}
             />
-          )
-        )}
-        
-        {currentQuestionIndex === questions.length && (
-          <div>
-            <h1>Тест завершен</h1>
-            <p>Правильных ответов: {score}</p>
-          </div>
-        )}
-      </>
+          )}
+        </>
+      )}
+      
+      {isTestComplete && (
+        <div>
+          <h1>Тест завершен</h1>
+          <p>Правильных ответов: {score}</p>
+          <Button variant="contained" color="primary" onClick={handleRestartTest}>
+            Начать тест заново
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
