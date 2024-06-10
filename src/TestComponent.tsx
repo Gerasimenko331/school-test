@@ -17,7 +17,7 @@ const TestComponent: React.FC = () => {
     },
     {
       question: "Третий вопрос",
-      answer: 'Ответ на третий вопрос'
+      answer: '123'
     }
   ];
 
@@ -28,7 +28,7 @@ const TestComponent: React.FC = () => {
     if (isCorrect) {
       setScore(prevScore => prevScore + 1);
     }
-    setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+    setCurrentQuestionIndex((prevIndex: number) => prevIndex + 1);
   };
 
   return (
@@ -36,14 +36,12 @@ const TestComponent: React.FC = () => {
       {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
         <>
           {currentQuestionIndex === 0 ? (
-          <Question
-          question={questions[currentQuestionIndex]?.question}
-          options={questions[currentQuestionIndex]?.options || []}
-          correctAnswer={questions[currentQuestionIndex]?.correctAnswers?.[0] || ''}
-          handleNextQuestion={handleNextQuestion}
-        />
-        
-         
+            <Question
+              question={questions[currentQuestionIndex]?.question}
+              options={questions[currentQuestionIndex]?.options || []}
+              correctAnswer={questions[currentQuestionIndex]?.correctAnswers?.[0] || ''}
+              handleNextQuestion={handleNextQuestion}
+            />
           ) : currentQuestionIndex === 1 ? (
             <MultipleChoiceQuestion
               question={questions[currentQuestionIndex].question}

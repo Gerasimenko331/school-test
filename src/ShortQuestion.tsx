@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useRef } from 'react';
 
 interface ShortQuestionProps {
   question: string;
@@ -7,18 +8,26 @@ interface ShortQuestionProps {
 }
 
 const ShortQuestion: React.FC<ShortQuestionProps> = ({ question, answer, handleNextQuestion }) => {
-  // Дополните компонент ShortQuestion с JSX для отображения вопроса с коротким ответом
+  const inputRef = useRef<HTMLInputElement>(null); // Указываем тип для ref
 
-  const submitAnswer = (userAnswer: string) => {
-    const isCorrect = userAnswer.toLowerCase() === answer.toLowerCase();
-    handleNextQuestion(isCorrect);
+  const handleAnswerClick = () => {
+    if (inputRef.current) {
+      const userAnswer = inputRef.current.value.trim().toLowerCase();
+      const correctAnswer = answer.trim().toLowerCase();
+  
+      if (userAnswer === correctAnswer) {
+        handleNextQuestion(true); // Засчитываем правильный ответ
+      } else {
+        handleNextQuestion(false); // Не засчитываем неправильный ответ
+      }
+    }
   };
 
   return (
     <div>
-      <p><strong>Вопрос: </strong>{question}</p>
-      <input type="text" placeholder="Введите ответ" />
-      <button onClick={() => submitAnswer('Введенный ответ')}>Отправить ответ</button>
+      <h3>{question}</h3>
+      <input type="text" ref={inputRef} />
+      <button onClick={handleAnswerClick}>Ответить</button>
     </div>
   );
 };
