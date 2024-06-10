@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Question from './Question';
 import MultipleChoiceQuestion from './MultipleChoiceQuestion';
+import ShortQuestion from './ShortQuestion';
 
 const TestComponent: React.FC = () => {
   const questions = [
@@ -13,6 +14,10 @@ const TestComponent: React.FC = () => {
       question: "Второй вопрос",
       options: ['X', 'Y', 'Z'],
       correctAnswers: ['X', 'Y']
+    },
+    {
+      question: "Третий вопрос",
+      answer: 'Ответ на третий вопрос'
     }
   ];
 
@@ -31,17 +36,25 @@ const TestComponent: React.FC = () => {
       {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
         <>
           {currentQuestionIndex === 0 ? (
-            <Question
+          <Question
+          question={questions[currentQuestionIndex]?.question}
+          options={questions[currentQuestionIndex]?.options || []}
+          correctAnswer={questions[currentQuestionIndex]?.correctAnswers?.[0] || ''}
+          handleNextQuestion={handleNextQuestion}
+        />
+        
+         
+          ) : currentQuestionIndex === 1 ? (
+            <MultipleChoiceQuestion
               question={questions[currentQuestionIndex].question}
-              options={questions[currentQuestionIndex].options}
-              correctAnswer={questions[currentQuestionIndex].correctAnswers[0]}
+              options={questions[currentQuestionIndex].options || []}
+              correctAnswers={questions[currentQuestionIndex].correctAnswers || []}
               handleNextQuestion={handleNextQuestion}
             />
           ) : (
-            <MultipleChoiceQuestion
+            <ShortQuestion
               question={questions[currentQuestionIndex].question}
-              options={questions[currentQuestionIndex].options}
-              correctAnswers={questions[currentQuestionIndex].correctAnswers}
+              answer={questions[currentQuestionIndex].answer || ''}
               handleNextQuestion={handleNextQuestion}
             />
           )}
