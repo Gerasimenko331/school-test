@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Question from './Question';
 import MultipleChoiceQuestion from './MultipleChoiceQuestion';
 import ShortQuestion from './ShortQuestion';
@@ -23,19 +23,37 @@ const TestComponent: React.FC = () => {
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [loadedFromStorage, setLoadedFromStorage] = useState(false);
 
   const handleNextQuestion = (isCorrect: boolean) => {
     if (isCorrect) {
       setScore(prevScore => prevScore + 1);
     }
-    setCurrentQuestionIndex((prevIndex: number) => prevIndex + 1);
+    setCurrentQuestionIndex(prevIndex => prevIndex + 1);
   };
+
+  useEffect(() => {
+    const savedProgress = localStorage.getItem('testProgress');
+    if (savedProgress) {
+      const { savedIndex, savedScore } = JSON.parse(savedProgress);
+      setCurrentQuestionIndex(savedIndex);
+      setScore(savedScore);
+      setLoadedFromStorage(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loadedFromStorage) {
+      const progress = { savedIndex: currentQuestionIndex, savedScore: score };
+      localStorage.setItem('testProgress', JSON.stringify(progress));
+    }
+  }, [currentQuestionIndex, score, loadedFromStorage]);
 
   return (
     <div>
-      {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
-        <>
-          {currentQuestionIndex === 0 ? (
+      <>
+        {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
+          currentQuestionIndex === 0 ? (
             <Question
               question={questions[currentQuestionIndex]?.question}
               options={questions[currentQuestionIndex]?.options || []}
@@ -55,15 +73,16 @@ const TestComponent: React.FC = () => {
               answer={questions[currentQuestionIndex].answer || ''}
               handleNextQuestion={handleNextQuestion}
             />
-          )}
-        </>
-      )}
-      {currentQuestionIndex === questions.length && (
-        <div>
-          <h1>Тест завершен</h1>
-          <p>Правильных ответов: {score}</p>
-        </div>
-      )}
+          )
+        )}
+        
+        {currentQuestionIndex === questions.length && (
+          <div>
+            <h1>Тест завершен</h1>
+            <p>Правильных ответов: {score}</p>
+          </div>
+        )}
+      </>
     </div>
   );
 };
