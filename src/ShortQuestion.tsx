@@ -1,5 +1,7 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 interface ShortQuestionProps {
   question: string;
@@ -8,17 +10,17 @@ interface ShortQuestionProps {
 }
 
 const ShortQuestion: React.FC<ShortQuestionProps> = ({ question, answer, handleNextQuestion }) => {
-  const inputRef = useRef<HTMLInputElement>(null); // Указываем тип для ref
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleAnswerClick = () => {
     if (inputRef.current) {
       const userAnswer = inputRef.current.value.trim().toLowerCase();
       const correctAnswer = answer.trim().toLowerCase();
-  
+
       if (userAnswer === correctAnswer) {
-        handleNextQuestion(true); // Засчитываем правильный ответ
+        handleNextQuestion(true);
       } else {
-        handleNextQuestion(false); // Не засчитываем неправильный ответ
+        handleNextQuestion(false);
       }
     }
   };
@@ -26,8 +28,10 @@ const ShortQuestion: React.FC<ShortQuestionProps> = ({ question, answer, handleN
   return (
     <div>
       <h3>{question}</h3>
-      <input type="text" ref={inputRef} />
-      <button onClick={handleAnswerClick}>Ответить</button>
+      <TextField inputRef={inputRef} variant="outlined" label="Ответ" />
+      <div style={{ marginTop: '20px' }}> {/* Добавляем отступ в 10 пикселей */}
+        <Button variant="contained" onClick={handleAnswerClick}>Ответить</Button>
+      </div>
     </div>
   );
 };

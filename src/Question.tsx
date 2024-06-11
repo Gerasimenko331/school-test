@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Radio from '@mui/material/Radio'; // Импортируем компонент Radio из Material-UI
+import RadioGroup from '@mui/material/RadioGroup'; // Импортируем компонент RadioGroup из Material-UI
 
 type QuestionProps = {
   question: string;
@@ -9,45 +12,39 @@ type QuestionProps = {
 
 const Question: React.FC<QuestionProps> = ({ question, options, correctAnswer, handleNextQuestion }) => {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  
+
     const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      setSelectedOption(value);
+        const value = event.target.value;
+        setSelectedOption(value);
     };
-  
+
     const checkAnswer = () => {
-      if (selectedOption === correctAnswer) {
-        handleNextQuestion(true);
-      } else {
-        handleNextQuestion(false);
-      }
+        if (selectedOption === correctAnswer) {
+            handleNextQuestion(true);
+        } else {
+            handleNextQuestion(false);
+        }
     };
-  
+
     const handleNext = () => {
-      setSelectedOption(null); // Очищаем выбранный ответ при переходе к следующему вопросу
-      checkAnswer();
+        setSelectedOption(null);
+        checkAnswer();
     };
-  
+
     return (
-      <div>
-        <h3>{question}</h3>
-        <ul>
-          {options.map((option, index) => (
-            <li key={index}>
-              <input
-                type="radio"
-                name="answer"
-                value={option}
-                checked={selectedOption === option}
-                onChange={handleOptionChange}
-              />
-              <label>{option}</label>
-            </li>
-          ))}
-        </ul>
-        <button onClick={handleNext}>Следующий вопрос</button>
-      </div>
+        <div>
+            <h3>{question}</h3>
+            <RadioGroup value={selectedOption} onChange={handleOptionChange}> {/* Добавляем RadioGroup */}
+                {options.map((option, index) => (
+                    <div key={index}>
+                        <Radio value={option} /> {/* Добавляем Radio для каждой опции */}
+                        <label>{option}</label>
+                    </div>
+                ))}
+            </RadioGroup>
+            <Button variant="contained" onClick={handleNext}>Следующий вопрос</Button>
+        </div>
     );
-  };
+};
 
 export default Question;

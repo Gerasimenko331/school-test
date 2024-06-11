@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 
 type MultipleChoiceQuestionProps = {
   question: string;
@@ -29,30 +31,28 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({ questio
   };
 
   const handleNext = () => {
-    setSelectedOptions([]); // Сбрасываем выбранные ответы при переходе к следующему вопросу
+    setSelectedOptions([]);
     checkAnswer();
   };
 
   return (
     <div>
       <h3>{question}</h3>
-      <ul>
+      <ul style={{ listStyle: 'none', padding: 0 }}> {/* Убираем маркеры и отступы для списка */}
         {options.map((option, index) => (
           <li key={index}>
-            <label>
-              <input
-                type="checkbox"
-                name="answer"
-                value={option}
+            <label style={{ display: 'flex', alignItems: 'center' }}> {/* Добавляем стили для лейбла и чекбокса */}
+              <Checkbox
                 checked={selectedOptions.includes(option)}
                 onChange={handleOptionChange}
+                value={option}
               />
-              {option}
+              <span>{option}</span> {/* Помещаем текст опции в отдельный элемент для стилизации */}
             </label>
           </li>
         ))}
       </ul>
-      <button onClick={handleNext}>Следующий вопрос</button>
+      <Button variant="contained" onClick={handleNext}>Следующий вопрос</Button>
     </div>
   );
 };
