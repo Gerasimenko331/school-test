@@ -4,6 +4,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ShortQuestion from "./ShortQuestion";
 import { Button, Typography } from "@mui/material";
 import "./TestComponent.css";
+import ProgressLine from './ProgressLine';
 
 const TestComponent: React.FC = () => {
   const questions = [
@@ -59,6 +60,7 @@ const TestComponent: React.FC = () => {
 
   return (
     <div className="test-container">
+      <ProgressLine totalSteps={questions.length} currentStep={currentQuestionIndex + 1} />
       {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
         <>
           {currentQuestionIndex === 0 ? (
