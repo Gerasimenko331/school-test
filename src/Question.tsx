@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import Radio from '@mui/material/Radio'; // Импортируем компонент Radio из Material-UI
-import RadioGroup from '@mui/material/RadioGroup'; // Импортируем компонент RadioGroup из Material-UI
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Typography from '@mui/material/Typography'; 
+import "./Question.css";
 
 type QuestionProps = {
   question: string;
@@ -33,15 +35,17 @@ const Question: React.FC<QuestionProps> = ({ question, options, correctAnswer, h
 
     return (
         <div>
-            <h3>{question}</h3>
-            <RadioGroup value={selectedOption} onChange={handleOptionChange}> {/* Добавляем RadioGroup */}
+            <Typography variant="h5">{question}</Typography>
+            <div className='radio-group'>
+            <RadioGroup value={selectedOption} onChange={handleOptionChange}>
                 {options.map((option, index) => (
                     <div key={index}>
-                        <Radio value={option} /> {/* Добавляем Radio для каждой опции */}
+                        <Radio value={option} />
                         <label>{option}</label>
                     </div>
                 ))}
             </RadioGroup>
+            </div>
             <Button variant="contained" onClick={handleNext}>Следующий вопрос</Button>
         </div>
     );

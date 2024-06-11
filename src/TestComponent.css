@@ -1,0 +1,12 @@
+.test-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Центрируем по вертикали на всю высоту видимой области */
+  }
+
+  .test-score {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  

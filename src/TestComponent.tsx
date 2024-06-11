@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Question from "./Question";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ShortQuestion from "./ShortQuestion";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import "./TestComponent.css";
 
 const TestComponent: React.FC = () => {
   const questions = [
@@ -57,7 +58,7 @@ const TestComponent: React.FC = () => {
   }, [currentQuestionIndex, score]);
 
   return (
-    <div>
+    <div className="test-container">
       {currentQuestionIndex < questions.length && currentQuestionIndex >= 0 && (
         <>
           {currentQuestionIndex === 0 ? (
@@ -90,8 +91,15 @@ const TestComponent: React.FC = () => {
 
       {isTestComplete && (
         <div>
-          <h1>Тест завершен</h1>
-          <p>Правильных ответов: {score}</p>
+          <Typography variant="h4" className="test-complete-heading">
+            Тест завершен
+          </Typography>{" "}
+          {/* Добавляем стиль для заголовка "Тест завершен" */}
+          <div className="test-score">
+            <Typography variant="h6">
+            Правильных ответов: {score}
+          </Typography>
+          </div>
           <Button
             variant="contained"
             color="primary"

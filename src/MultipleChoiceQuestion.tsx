@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import Typography from '@mui/material/Typography'; // Импортируем компонент Typography из Material-UI
 
 type MultipleChoiceQuestionProps = {
   question: string;
@@ -37,17 +38,17 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({ questio
 
   return (
     <div>
-      <h3>{question}</h3>
-      <ul style={{ listStyle: 'none', padding: 0 }}> {/* Убираем маркеры и отступы для списка */}
+      <Typography variant="h5">{question}</Typography> {/* Добавляем стиль для заголовка */}
+      <ul style={{ listStyle: 'none', padding: 0 }}>
         {options.map((option, index) => (
           <li key={index}>
-            <label style={{ display: 'flex', alignItems: 'center' }}> {/* Добавляем стили для лейбла и чекбокса */}
+            <label style={{ display: 'flex', alignItems: 'center' }}>
               <Checkbox
                 checked={selectedOptions.includes(option)}
                 onChange={handleOptionChange}
                 value={option}
               />
-              <span>{option}</span> {/* Помещаем текст опции в отдельный элемент для стилизации */}
+              <span>{option}</span>
             </label>
           </li>
         ))}
