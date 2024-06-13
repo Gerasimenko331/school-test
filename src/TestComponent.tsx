@@ -5,6 +5,7 @@ import ShortQuestion from "./ShortQuestion";
 import { Button, Typography } from "@mui/material";
 import "./TestComponent.css";
 import ProgressLine from './ProgressLine';
+import LongQuestion from "./LongQuestion";
 
 const TestComponent: React.FC = () => {
   const questions = [
@@ -22,19 +23,24 @@ const TestComponent: React.FC = () => {
       question: "Третий вопрос",
       answer: "123",
     },
+    {
+      question: "Четвертый вопрос с длинным ответом",
+    },
   ];
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(
-    parseInt(localStorage.getItem("currentQuestionIndex") || "0")
+    parseInt(localStorage.getItem("currentQuestionIndex") ?? "0")
   );
   const [score, setScore] = useState(
-    parseInt(localStorage.getItem("score") || "0")
+    parseInt(localStorage.getItem("score") ?? "0")
   );
   const [isTestComplete, setIsTestComplete] = useState(false);
 
   const handleNextQuestion = (isCorrect: boolean) => {
-    if (isCorrect) {
-      setScore((prevScore) => prevScore + 1);
+    if (currentQuestionIndex !== 3) {
+      if (isCorrect) {
+        setScore((prevScore) => prevScore + 1);
+      }
     }
     setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
   };
@@ -43,7 +49,7 @@ const TestComponent: React.FC = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setIsTestComplete(false);
-    localStorage.clear(); // Очищаем сохраненные данные при рестарте
+    localStorage.clear(); 
   };
 
   useEffect(() => {
@@ -66,25 +72,26 @@ const TestComponent: React.FC = () => {
           {currentQuestionIndex === 0 ? (
             <Question
               question={questions[currentQuestionIndex]?.question}
-              options={questions[currentQuestionIndex]?.options || []}
-              correctAnswer={
-                questions[currentQuestionIndex]?.correctAnswers?.[0] || ""
-              }
+              options={questions[currentQuestionIndex]?.options ?? []}
+              correctAnswer={questions[currentQuestionIndex]?.correctAnswers?.[0] ?? ""}
               handleNextQuestion={handleNextQuestion}
             />
           ) : currentQuestionIndex === 1 ? (
             <MultipleChoiceQuestion
               question={questions[currentQuestionIndex].question}
-              options={questions[currentQuestionIndex].options || []}
-              correctAnswers={
-                questions[currentQuestionIndex].correctAnswers || []
-              }
+              options={questions[currentQuestionIndex].options ?? []}
+              correctAnswers={questions[currentQuestionIndex].correctAnswers ?? []}
               handleNextQuestion={handleNextQuestion}
             />
-          ) : (
+          ) : currentQuestionIndex === 2 ? (
             <ShortQuestion
               question={questions[currentQuestionIndex].question}
               answer={questions[currentQuestionIndex].answer || ""}
+              handleNextQuestion={handleNextQuestion}
+            />
+          ) : (
+            <LongQuestion
+              question={questions[currentQuestionIndex].question}
               handleNextQuestion={handleNextQuestion}
             />
           )}
@@ -95,12 +102,11 @@ const TestComponent: React.FC = () => {
         <div>
           <Typography variant="h4" className="test-complete-heading">
             Тест завершен
-          </Typography>{" "}
-          {/* Добавляем стиль для заголовка "Тест завершен" */}
+          </Typography>
           <div className="test-score">
             <Typography variant="h6">
-            Правильных ответов: {score}
-          </Typography>
+              Правильных ответов: {score}
+            </Typography>
           </div>
           <Button
             variant="contained"
