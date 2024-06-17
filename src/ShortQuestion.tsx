@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography'; // Импортируем компонент Typography из Material-UI
+import React, { useRef } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 interface ShortQuestionProps {
   question: string;
@@ -9,7 +9,11 @@ interface ShortQuestionProps {
   handleNextQuestion: (isCorrect: boolean) => void;
 }
 
-const ShortQuestion: React.FC<ShortQuestionProps> = ({ question, answer, handleNextQuestion }) => {
+const ShortQuestion: React.FC<ShortQuestionProps> = ({
+  question,
+  answer,
+  handleNextQuestion,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleAnswerClick = () => {
@@ -27,10 +31,21 @@ const ShortQuestion: React.FC<ShortQuestionProps> = ({ question, answer, handleN
 
   return (
     <div>
-      <Typography variant="h5" style={{ marginBottom: '10px' }}>{question}</Typography> {/* Добавляем отступ снизу у заголовка */}
-      <TextField inputRef={inputRef} variant="outlined" label="Ответ" style={{ marginTop: '10px' }} /> {/* Добавляем отступ сверху для TextField */}
-      <div style={{ marginTop: '26px' }}>
-        <Button variant="contained" onClick={handleAnswerClick}>Ответить</Button>
+      <Typography variant="h5" style={{ marginBottom: "10px" }}>
+        {question}
+      </Typography>{" "}
+
+      <TextField
+        inputRef={inputRef}
+        variant="outlined"
+        label="Ответ"
+        style={{ marginTop: "10px" }}
+      />{" "}
+
+      <div style={{ marginTop: "26px" }}>
+        <Button variant="contained" onClick={handleAnswerClick}>
+          Следующий вопрос
+        </Button>
       </div>
     </div>
   );

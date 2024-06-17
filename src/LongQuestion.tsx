@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 interface QuestionProps {
   question: string;
@@ -20,15 +22,17 @@ const LongQuestion: React.FC<QuestionProps> = ({ question, handleNextQuestion })
 
   return (
     <div>
-      <h2>{question}</h2>
+      <Typography variant="h5" style={{ marginBottom: '10px' }}>{question}</Typography>
       <textarea
         value={answer}
         onChange={handleAnswerChange}
         rows={6}
         cols={50}
-        placeholder="Enter your answer here"
+        placeholder="Напишите ответ здесь"
       />
-      <button onClick={handleNext}>Next Question</button> {/* Добавим кнопку для перехода к следующему вопросу */}
+      <div style={{ marginTop: '26px' }}>
+      <Button variant="contained" onClick={handleNext}>Следующий вопрос</Button> {/* Добавим кнопку для перехода к следующему вопросу */}
+      </div>
     </div>
   );
 };
